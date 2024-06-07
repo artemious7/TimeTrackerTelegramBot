@@ -1,0 +1,21 @@
+POST http://localhost:7287/api/ProcessUpdate
+Content-Type: application/json
+
+{
+  "update_id": 1, 
+  "message": { 
+    "message_id": 1,
+    "date": 1715949873,
+    "chat": {
+        "id": 2,
+        "type": "private"
+    },
+    "from": { 
+      "id": 2, 
+      "is_bot": false,
+      "first_name": "User"
+    },
+    "text": "2:08"
+  } 
+}
+    

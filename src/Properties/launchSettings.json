@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ReportCounterBot2": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7287",
+      "launchBrowser": false
+    }
+  }
+}
