@@ -3,7 +3,7 @@
 
 *.arm.json
 # Azure Functions localsettings file
-# local.settings.json
+# local.settings.json # not ignoring since it doesn't contain secrets
 
 # User-specific files
 *.suo
