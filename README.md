@@ -2,6 +2,8 @@
 
 This bot is designed to help you efficiently track and report your working time through a convenient and intuitive interface.
 
+Try it live at [@turbo_time_tracker_bot](https://t.me/turbo_time_tracker_bot)
+
 ## Motivation
 
 I built this project to solve a common problem I faced in my personal and professional life - tracking the amount of time spent on work throughout the month. I found that traditional methods like using mobile apps were too complicated and lacked the convenience and real-time accessibility I needed. As an avid user of Telegram, I decided to create this bot to integrate seamlessly with my daily workflow. Now, tracking time has never been easier or more convenient!
