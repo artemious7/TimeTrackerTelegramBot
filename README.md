@@ -1,5 +1,7 @@
 # TimeTracker Telegram Bot
 
+<img src="docs/icon.png" height="60" />
+
 This bot is designed to help you efficiently track and report your working time through a convenient and intuitive interface.
 
 Try it live at [@turbo_time_tracker_bot](https://t.me/turbo_time_tracker_bot)
@@ -12,7 +14,7 @@ I built this project to solve a common problem I faced in my personal and profes
 
 To get started with the TimeTracker Telegram Bot, follow these simple steps.
 
-### Registering Your Telegram Bot
+### Registering your telegram bot
 
 To register your Telegram bot using BotFather, follow these steps:
 
@@ -173,3 +175,7 @@ Thank you for contributing to the TimeTracker Telegram Bot!
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Attributions
+
+<a href="https://www.flaticon.com/free-icons/time-tracking" title="time tracking icons">Time tracking icons created by Flat Icons - Flaticon</a>
