@@ -1,6 +1,6 @@
-﻿using ReportCounterBot.ReportCounter;
+﻿using TimeTrackerBot.TimeTracker;
 
-namespace ReportCounterBot.Services;
+namespace TimeTrackerBot.Services;
 
 public interface IResponder
 {

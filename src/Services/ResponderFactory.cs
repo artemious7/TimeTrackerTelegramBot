@@ -1,5 +1,5 @@
-﻿using ReportCounterBot.ReportCounter;
+﻿using TimeTrackerBot.TimeTracker;
 
-namespace ReportCounterBot.Services;
+namespace TimeTrackerBot.Services;
 
 public delegate IResponder ResponderFactory(string message, UserData? data, MessageSender SendMessage);

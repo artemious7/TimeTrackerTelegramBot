@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Internal;
-using ReportCounterBot.Services;
+using TimeTrackerBot.Services;
 using System.Diagnostics.CodeAnalysis;
 
-namespace ReportCounterBot.ReportCounter;
+namespace TimeTrackerBot.TimeTracker;
 
 public class Responder(string message, UserData? data, MessageSender SendMessage, ISystemClock clock) : IResponder
 {

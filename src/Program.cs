@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Internal;
-using ReportCounterBot.ReportCounter;
-using ReportCounterBot.Services;
+using TimeTrackerBot.TimeTracker;
+using TimeTrackerBot.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(workerApp =>

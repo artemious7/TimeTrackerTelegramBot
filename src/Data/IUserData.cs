@@ -1,4 +1,4 @@
-﻿namespace ReportCounterBot.Data;
+﻿namespace TimeTrackerBot.Data;
 
 internal interface IUserData
 {

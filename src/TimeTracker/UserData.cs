@@ -1,7 +1,7 @@
-﻿using ReportCounterBot.Data;
+﻿using TimeTrackerBot.Data;
 using System.Text.Json.Serialization;
 
-namespace ReportCounterBot.ReportCounter;
+namespace TimeTrackerBot.TimeTracker;
 
 public record UserData(TimeSpan Time, DateTimeOffset Started, TimeSpan? PreviousTime) : IUserData
 {

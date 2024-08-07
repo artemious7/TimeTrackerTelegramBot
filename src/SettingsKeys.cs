@@ -1,4 +1,4 @@
-﻿namespace ReportCounterBot;
+﻿namespace TimeTrackerBot;
 
 public static class SettingsKeys
 {
