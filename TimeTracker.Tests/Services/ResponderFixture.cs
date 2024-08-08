@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.Internal;
 using NSubstitute;
 using TimeTracker.Services;
 using TimeTrackerBot.Services;
@@ -25,5 +24,22 @@ public class ResponderFixture
 
         // Assert
         newData.Should().Be(originalData);
+    }
+
+    [Fact]
+    public async Task GivenListOfHandlers_WhenProcessAndAllHandlersReturnFalse_ThenAllHandlersCalled()
+    {
+        // Arrange
+        string message = "any message";
+        List<IHandler> handlers = [.. Enumerable.Range(1, 10).Select(r => Substitute.For<IHandler>())];
+        var originalData = new UserData(TimeSpan.FromHours(1), default, TimeSpan.FromHours(2));
+        var sut = new Responder(message, originalData, messageSender, handlers);
+
+        // Act
+        var newData = await sut.Process();
+
+        // Assert
+        newData.Should().Be(originalData, "user data should not be changed unless changed by handlers");
+        handlers.ForEach(r => _ = r.Received(1).TryHandle(message, messageSender));
     }
 }
