@@ -27,19 +27,24 @@ public class ResponderFixture
     }
 
     [Fact]
-    public async Task GivenListOfHandlers_WhenProcessAndAllHandlersReturnFalse_ThenAllHandlersCalled()
+    public async Task GivenListOfHandlers_WhenProcessAndAllHandlersReturnFalse_ThenAllHandlersCalledInOrder()
     {
         // Arrange
         string message = "any message";
-        List<IHandler> handlers = [.. Enumerable.Range(1, 10).Select(r => Substitute.For<IHandler>())];
+        List<IHandler> handlersInput = [.. Enumerable.Range(1, 10).Select(r => Substitute.For<IHandler>())];
+        List<IHandler> calledHandlers = [];
+        handlersInput.ForEach(handler => handler
+            .WhenForAnyArgs(r => r.TryHandle(default, default, messageSender))
+            .Do(c => calledHandlers.Add(handler)));
         var originalData = new UserData(TimeSpan.FromHours(1), default, TimeSpan.FromHours(2));
-        var sut = new Responder(message, originalData, messageSender, handlers);
+        var sut = new Responder(message, originalData, messageSender, handlersInput);
 
         // Act
         var newData = await sut.Process();
 
         // Assert
-        newData.Should().Be(originalData, "user data should not be changed unless changed by handlers");
-        handlers.ForEach(r => _ = r.Received(1).TryHandle(message, messageSender));
+        newData.Should().Be(originalData, "user data should not be changed unless changed by handlersInput");
+        handlersInput.ForEach(r => _ = r.Received(1).TryHandle(message, originalData, messageSender));
+        calledHandlers.Should().Equal(handlersInput);
     }
 }

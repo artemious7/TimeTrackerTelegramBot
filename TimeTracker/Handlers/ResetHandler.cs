@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Internal;
+using System.Diagnostics.CodeAnalysis;
 using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
@@ -7,7 +8,7 @@ namespace TimeTracker;
 
 public class ResetHandler(ISystemClock clock) : IHandler
 {
-    public async Task<HandleResult> TryHandle(string message, UserData? data, MessageSender SendMessage)
+    public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
         if (data is { } && IsCommand(ResetCommand))
         {
