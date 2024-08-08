@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using TimeTrackerBot.Services;
-using static FluentAssertions.FluentActions;
 
 namespace TimeTracker.Tests;
 

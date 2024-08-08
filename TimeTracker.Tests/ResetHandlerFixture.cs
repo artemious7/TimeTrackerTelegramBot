@@ -35,7 +35,7 @@ public class ResetHandlerFixture
     }
 
     [Fact]
-    public async Task GivenResetCommand_WhenTryHandle_ThenSendsResetResponseAndReturnsEmptyDataWithCurrentTimeAndReturnsTrue()
+    public async Task GivenResetCommand_WhenTryHandle_ThenSendsResetResponseAndReturnsEmptyDataWithCurrentTimeAndPreviousTimeAndReturnsTrue()
     {
         // Arrange
         string message = "/reset";
