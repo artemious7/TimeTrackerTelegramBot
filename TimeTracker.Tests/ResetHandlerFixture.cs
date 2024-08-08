@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Internal;
 using NSubstitute;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
@@ -9,10 +10,12 @@ public class ResetHandlerFixture
 {
     private readonly ResetHandler sut;
     private readonly DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
+    private readonly ISystemClock clock = Substitute.For<ISystemClock>();
 
     public ResetHandlerFixture()
     {
-        sut = new ResetHandler();
+        clock.UtcNow.Returns(Now);
+        sut = new ResetHandler(clock);
     }
 
     [Fact]
@@ -45,7 +48,7 @@ public class ResetHandlerFixture
         // Assert
         handled.Should().BeTrue();
         await messageSender.Received(1).Invoke($"Started over. Total time recorded: 0:00");
-        message.ReceivedCalls().Should().ContainSingle();
-        data.Should().Be(new UserData(default, Now, default));
+        messageSender.ReceivedCalls().Should().ContainSingle();
+        data.Should().Be(new UserData(TimeSpan.Zero, Now, TimeSpan.FromHours(2)));
     }
 }
