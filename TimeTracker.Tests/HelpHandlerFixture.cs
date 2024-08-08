@@ -17,8 +17,9 @@ public class HelpHandlerFixture
         // Act
         bool handled = await handler.TryHandle(message, messageSender);
 
-        // 
+        // Assert
         handled.Should().BeFalse();
+        await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
     }
 
     [Fact]

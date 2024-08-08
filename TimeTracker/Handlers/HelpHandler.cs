@@ -10,7 +10,7 @@ namespace TimeTracker
 
         public async Task<bool> TryHandle(string message, MessageSender messageSender)
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
