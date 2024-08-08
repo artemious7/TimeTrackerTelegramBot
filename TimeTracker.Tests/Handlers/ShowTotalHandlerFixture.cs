@@ -8,6 +8,7 @@ namespace TimeTracker.Tests.Handlers;
 public class ShowTotalHandlerFixture
 {
     private readonly ShowTotalHandler sut;
+    private readonly DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 
     public ShowTotalHandlerFixture()
     {
@@ -43,6 +44,25 @@ public class ShowTotalHandlerFixture
         // Assert
         handled.Should().BeFalse();
         await messageSender.DidNotSendAnything();
+    }
+
+    [Fact]
+    public async Task GivenShowTotalCommandLowerCase_WhenTryHandle_ThenSendsShowTotalResponseAndReturnsTrue()
+    {
+        // Arrange
+        string message = "/showtotal";
+        var messageSender = Substitute.For<MessageSender>();
+        var originalData = new UserData(TimeSpan.FromHours(2), Now, TimeSpan.FromHours(1));
+
+        // Act
+        var (handled, newData) = await sut.TryHandle(message, originalData, messageSender);
+
+        // Assert
+        handled.Should().BeTrue();
+        // TODO: ext method
+        await messageSender.Received(1).Invoke($"Total time recorded is 2:00 since Friday, January 1, 2021 1:01 AM.");
+        messageSender.ReceivedCalls().Should().ContainSingle();
+        newData.Should().Be(originalData);
     }
 
 }
