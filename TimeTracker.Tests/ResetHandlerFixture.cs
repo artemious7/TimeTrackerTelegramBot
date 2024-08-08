@@ -35,6 +35,21 @@ public class ResetHandlerFixture
     }
 
     [Fact]
+    public async Task GivenResetCommandAndNoData_WhenTryHandle_ThenReturnsFalse()
+    {
+        // Arrange
+        string message = "any other message";
+        var messageSender = Substitute.For<MessageSender>();
+
+        // Act
+        bool handled = await sut.TryHandle(message, (UserData?)null, messageSender);
+
+        // Assert
+        handled.Should().BeFalse();
+        await messageSender.DidNotSendAnything();
+    }
+
+    [Fact]
     public async Task GivenResetCommand_WhenTryHandle_ThenSendsResetResponseAndReturnsEmptyDataWithCurrentTimeAndPreviousTimeAndReturnsTrue()
     {
         // Arrange
