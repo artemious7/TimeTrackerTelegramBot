@@ -1,10 +1,11 @@
-﻿using TimeTrackerBot.Services;
+﻿using System.Diagnostics.CodeAnalysis;
+using TimeTrackerBot.Services;
 
 namespace TimeTracker;
 
 public class HelpHandler : IHandler
 {
-    public async Task<bool> TryHandle(string message, MessageSender SendMessage)
+    public async Task<bool> TryHandle([AllowNull] string message, MessageSender SendMessage)
     {
         if (IsCommand(StartCommand) || IsCommand(HelpCommand))
         {

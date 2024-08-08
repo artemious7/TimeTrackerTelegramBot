@@ -33,6 +33,13 @@ public class WelcomeHandlerFixture
     //[Fact]
     //public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
     //{
+    //    // Arrange
+    //    var messageSender = Substitute.For<MessageSender>();
+    //    UserData? data = default;
 
+    //    // Act
+    //    bool handled = await sut.TryHandle(data, messageSender);
+
+    //    // Assert
     //}
 }
