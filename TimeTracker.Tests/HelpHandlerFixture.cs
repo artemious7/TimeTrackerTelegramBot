@@ -14,10 +14,10 @@ public class HelpHandlerFixture
     }
 
     [Fact]
-    public async Task GivenAnyMessage_WhenTryHandle_ThenReturnsFalse()
+    public async Task GivenAnyOtherMessage_WhenTryHandle_ThenReturnsFalse()
     {
         // Arrange
-        string message = "any message";
+        string message = "any other message";
         var messageSender = Substitute.For<MessageSender>();
 
         // Act

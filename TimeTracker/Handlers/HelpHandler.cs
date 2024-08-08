@@ -21,9 +21,9 @@ public class HelpHandler
     private const string StartCommand = "/start";
     private const string HelpCommand = "/help";
     private const string LineBreak = "  \r\n";
-    private static string CommandListString => string.Join("", CommandList.Select(command => $"{LineBreak} {command}"));
     private const string ResetCommand = "/reset";
     private const string ShowTotalCommand = "/showTotal";
     private const string UndoCommand = "/undo";
+    private static string CommandListString => string.Join("", CommandList.Select(command => $"{LineBreak} {command}"));
     private static readonly string[] CommandList = [ShowTotalCommand, UndoCommand, ResetCommand, HelpCommand];
 }
