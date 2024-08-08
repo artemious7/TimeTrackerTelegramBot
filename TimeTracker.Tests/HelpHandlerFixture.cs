@@ -28,11 +28,12 @@ public class HelpHandlerFixture
         await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
     }
 
-    [Fact]
-    public async Task GivenHelpCommand_WhenTryHandle_ThenSendsHelpMessageAndReturnsTrue()
+    [Theory]
+    [InlineData("/help")]
+    [InlineData("/start")]
+    public async Task GivenHelpCommand_WhenTryHandle_ThenSendsHelpMessageAndReturnsTrue(string message)
     {
         // Arrange
-        string message = "/help";
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
