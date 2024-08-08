@@ -47,11 +47,12 @@ public class ShowTotalHandlerFixture
         await messageSender.DidNotSendAnything();
     }
 
-    [Fact]
-    public async Task GivenShowTotalCommandLowerCase_WhenTryHandle_ThenSendsShowTotalResponseAndReturnsTrue()
+    [Theory]
+    [InlineData("/showtotal")]
+    [InlineData("/showTotal")]
+    public async Task GivenShowTotalCommand_WhenTryHandle_ThenSendsShowTotalResponseAndReturnsTrue(string message)
     {
         // Arrange
-        string message = "/showtotal";
         var originalData = new UserData(TimeSpan.FromHours(2), Now, TimeSpan.FromHours(1));
 
         // Act
