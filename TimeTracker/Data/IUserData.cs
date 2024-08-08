@@ -1,5 +1,5 @@
 ﻿namespace TimeTrackerBot.Data;
 
-internal interface IUserData
+public interface IUserData
 {
 }
