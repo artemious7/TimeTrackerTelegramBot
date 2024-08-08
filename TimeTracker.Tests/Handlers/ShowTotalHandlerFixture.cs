@@ -29,4 +29,20 @@ public class ShowTotalHandlerFixture
         handled.Should().BeFalse();
         await messageSender.DidNotSendAnything();
     }
+
+    [Fact]
+    public async Task GivenShowTotalCommandAndNoData_WhenTryHandle_ThenReturnsFalse()
+    {
+        // Arrange
+        string message = "/showtotal";
+        var messageSender = Substitute.For<MessageSender>();
+
+        // Act
+        bool handled = await sut.TryHandle(message, (UserData?)null, messageSender);
+
+        // Assert
+        handled.Should().BeFalse();
+        await messageSender.DidNotSendAnything();
+    }
+
 }

@@ -11,7 +11,7 @@ public class ShowTotalHandler
 
     }
 
-    public async Task<HandleResult> TryHandle(string message, UserData data, MessageSender messageSender)
+    public async Task<HandleResult> TryHandle(string message, UserData? data, MessageSender messageSender)
     {
         return HandleResult.NotHandled;
     }
