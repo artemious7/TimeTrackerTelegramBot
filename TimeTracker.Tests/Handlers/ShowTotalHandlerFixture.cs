@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NSubstitute;
+using System.Globalization;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
@@ -12,6 +13,7 @@ public class ShowTotalHandlerFixture
 
     public ShowTotalHandlerFixture()
     {
+        CultureInfo.CurrentCulture = new CultureInfo("en-US");
         sut = new ShowTotalHandler();
     }
 
