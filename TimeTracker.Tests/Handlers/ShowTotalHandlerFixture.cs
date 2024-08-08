@@ -10,6 +10,7 @@ public class ShowTotalHandlerFixture
 {
     private readonly ShowTotalHandler sut;
     private readonly DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
+    private readonly MessageSender messageSender = Substitute.For<MessageSender>();
 
     public ShowTotalHandlerFixture()
     {
@@ -22,7 +23,6 @@ public class ShowTotalHandlerFixture
     {
         // Arrange
         string message = "any other message";
-        var messageSender = Substitute.For<MessageSender>();
         var data = new UserData(default, default, default);
 
         // Act
@@ -38,10 +38,9 @@ public class ShowTotalHandlerFixture
     {
         // Arrange
         string message = "/showtotal";
-        var messageSender = Substitute.For<MessageSender>();
 
         // Act
-        bool handled = await sut.TryHandle(message, (UserData?)null, messageSender);
+        bool handled = await sut.TryHandle(message, null, messageSender);
 
         // Assert
         handled.Should().BeFalse();
@@ -53,7 +52,6 @@ public class ShowTotalHandlerFixture
     {
         // Arrange
         string message = "/showtotal";
-        var messageSender = Substitute.For<MessageSender>();
         var originalData = new UserData(TimeSpan.FromHours(2), Now, TimeSpan.FromHours(1));
 
         // Act
@@ -61,9 +59,7 @@ public class ShowTotalHandlerFixture
 
         // Assert
         handled.Should().BeTrue();
-        // TODO: ext method
-        await messageSender.Received(1).Invoke($"Total time recorded is 2:00 since Friday, January 1, 2021 1:01 AM.");
-        messageSender.ReceivedCalls().Should().ContainSingle();
+        await messageSender.SentOnly("Total time recorded is 2:00 since Friday, January 1, 2021 1:01 AM.");
         newData.Should().Be(originalData);
     }
 
