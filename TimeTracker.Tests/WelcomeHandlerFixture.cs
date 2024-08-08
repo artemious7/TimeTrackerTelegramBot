@@ -18,7 +18,6 @@ public class WelcomeHandlerFixture
     public async Task GivenUserHasData_WhenTryHandle_ThenReturnsFalse()
     {
         // Arrange
-        //string message = "any message";
         var messageSender = Substitute.For<MessageSender>();
         UserData? data = new UserData(default, default, default);
 

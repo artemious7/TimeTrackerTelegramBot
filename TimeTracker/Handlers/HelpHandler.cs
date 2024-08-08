@@ -2,7 +2,7 @@
 
 namespace TimeTracker;
 
-public class HelpHandler
+public class HelpHandler : IHandler
 {
     public async Task<bool> TryHandle(string message, MessageSender SendMessage)
     {

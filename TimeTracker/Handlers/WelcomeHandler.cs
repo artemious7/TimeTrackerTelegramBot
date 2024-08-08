@@ -1,13 +1,12 @@
 ﻿using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
-namespace TimeTracker
+namespace TimeTracker;
+
+public class WelcomeHandler : IHandler
 {
-    public class WelcomeHandler
+    public async Task<bool> TryHandle(UserData data, MessageSender messageSender)
     {
-        public async Task<bool> TryHandle(UserData data, MessageSender messageSender)
-        {
-            throw new NotImplementedException();
-        }
+        return false;
     }
 }
