@@ -8,14 +8,15 @@ public class WelcomeHandler(ISystemClock clock) : IHandler
 {
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 #pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
-    public async Task<bool> TryHandle(UserData? data, MessageSender messageSender)
+    public async Task<HandleResult> TryHandle(UserData? data, MessageSender messageSender)
     {
         if (data is null)
         {
             SaveData(new UserData(default, Now, default));
             //await Help();
+            return new HandleResult(true, data);
         }
-        return false;
+        return new HandleResult(false, data);
 
         void SaveData(UserData newData) => data = newData;
     }

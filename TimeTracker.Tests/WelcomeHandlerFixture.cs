@@ -36,7 +36,7 @@ public class WelcomeHandlerFixture
     }
 
     [Fact]
-    public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
+    public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndReturnsTrue()
     {
         // Arrange
         var messageSender = Substitute.For<MessageSender>();
@@ -49,4 +49,19 @@ public class WelcomeHandlerFixture
         handled.Should().BeTrue();
         userData.Should().Be(new UserData(default, Now, default));
     }
+
+    //[Fact]
+    //public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
+    //{
+    //    // Arrange
+    //    var messageSender = Substitute.For<MessageSender>();
+    //    UserData? data = default;
+
+    //    // Act
+    //    (bool handled, UserData? userData) = await sut.TryHandle(data, messageSender);
+
+    //    // Assert
+    //    handled.Should().BeTrue();
+    //    userData.Should().Be(new UserData(default, Now, default));
+    //}
 }
