@@ -26,7 +26,7 @@ public class HelpHandlerFixture
 
         // Assert
         handled.Should().BeFalse();
-        await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
+        await messageSender.DidNotSendAnything();
     }
 
     [Theory]
@@ -56,6 +56,6 @@ public class HelpHandlerFixture
 
         // Assert
         handled.Should().BeFalse();
-        await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
+        await messageSender.DidNotSendAnything();
     }
 }

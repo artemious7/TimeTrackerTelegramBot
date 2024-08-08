@@ -33,8 +33,7 @@ public class WelcomeHandlerFixture
 
         // Assert
         handled.Should().BeFalse();
-        // TODO: to extension method
-        await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
+        await messageSender.DidNotSendAnything();
     }
 
     [Fact]
@@ -52,6 +51,6 @@ public class WelcomeHandlerFixture
         userData.Should().Be(new UserData(default, Now, default));
         await helpResponder.Received(1).Help(messageSender);
         helpResponder.ReceivedCalls().Should().ContainSingle();
-        messageSender.ReceivedCalls().Should().BeEmpty();
+        await messageSender.DidNotSendAnything();
     }
 }
