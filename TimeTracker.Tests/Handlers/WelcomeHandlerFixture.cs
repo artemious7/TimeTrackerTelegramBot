@@ -4,7 +4,7 @@ using NSubstitute;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
-namespace TimeTracker.Tests;
+namespace TimeTracker.Tests.Handlers;
 
 public class WelcomeHandlerFixture
 {

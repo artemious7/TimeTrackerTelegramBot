@@ -4,7 +4,7 @@ using NSubstitute;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
-namespace TimeTracker.Tests;
+namespace TimeTracker.Tests.Handlers;
 
 public class ResetHandlerFixture
 {
@@ -42,7 +42,7 @@ public class ResetHandlerFixture
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
-        bool handled = await sut.TryHandle(message, (UserData?)null, messageSender);
+        bool handled = await sut.TryHandle(message, null, messageSender);
 
         // Assert
         handled.Should().BeFalse();

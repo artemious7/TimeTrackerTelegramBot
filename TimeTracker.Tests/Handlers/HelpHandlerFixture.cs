@@ -2,7 +2,7 @@
 using NSubstitute;
 using TimeTrackerBot.Services;
 
-namespace TimeTracker.Tests;
+namespace TimeTracker.Tests.Handlers;
 
 public class HelpHandlerFixture
 {
