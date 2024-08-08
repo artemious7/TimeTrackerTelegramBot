@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Internal;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
@@ -12,7 +8,16 @@ namespace TimeTracker.Tests;
 
 public class WelcomeHandlerFixture
 {
-    private readonly WelcomeHandler sut = new();
+    private readonly ISystemClock clock;
+    DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.FromHours(10));
+    private readonly WelcomeHandler sut;
+
+    public WelcomeHandlerFixture()
+    {
+        clock = Substitute.For<ISystemClock>();
+        clock.UtcNow.Returns(Now);
+        sut = new(clock);
+    }
 
     [Fact]
     public async Task GivenUserHasData_WhenTryHandle_ThenReturnsFalse()
@@ -30,16 +35,18 @@ public class WelcomeHandlerFixture
         await messageSender.DidNotReceiveWithAnyArgs().Invoke(Arg.Any<string>());
     }
 
-    //[Fact]
-    //public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
-    //{
-    //    // Arrange
-    //    var messageSender = Substitute.For<MessageSender>();
-    //    UserData? data = default;
+    [Fact]
+    public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
+    {
+        // Arrange
+        var messageSender = Substitute.For<MessageSender>();
+        UserData? data = default;
 
-    //    // Act
-    //    bool handled = await sut.TryHandle(data, messageSender);
+        // Act
+        (bool handled, UserData? userData) = await sut.TryHandle(data, messageSender);
 
-    //    // Assert
-    //}
+        // Assert
+        handled.Should().BeTrue();
+        userData.Should().Be(new UserData(default, Now, default));
+    }
 }
