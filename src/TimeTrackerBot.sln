@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTrackerBot", "TimeTrack
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Tests", "..\TimeTracker.Tests\TimeTracker.Tests.csproj", "{20B7A1E3-D37C-4820-9FF8-08AC5BE56992}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker", "..\TimeTracker\TimeTracker.csproj", "{88EC1B58-14EB-470F-9646-22B9AB3C3247}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{20B7A1E3-D37C-4820-9FF8-08AC5BE56992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20B7A1E3-D37C-4820-9FF8-08AC5BE56992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20B7A1E3-D37C-4820-9FF8-08AC5BE56992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88EC1B58-14EB-470F-9646-22B9AB3C3247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88EC1B58-14EB-470F-9646-22B9AB3C3247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88EC1B58-14EB-470F-9646-22B9AB3C3247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88EC1B58-14EB-470F-9646-22B9AB3C3247}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
