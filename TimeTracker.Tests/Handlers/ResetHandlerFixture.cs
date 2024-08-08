@@ -38,7 +38,7 @@ public class ResetHandlerFixture
     public async Task GivenResetCommandAndNoData_WhenTryHandle_ThenReturnsFalse()
     {
         // Arrange
-        string message = "any other message";
+        string message = "/reset";
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
