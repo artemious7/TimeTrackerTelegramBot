@@ -9,14 +9,16 @@ namespace TimeTracker.Tests;
 public class WelcomeHandlerFixture
 {
     private readonly ISystemClock clock;
-    DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.FromHours(10));
+    private readonly DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.FromHours(10));
+    private readonly IHelpResponder helpResponder;
     private readonly WelcomeHandler sut;
 
     public WelcomeHandlerFixture()
     {
         clock = Substitute.For<ISystemClock>();
         clock.UtcNow.Returns(Now);
-        sut = new(clock);
+        helpResponder = Substitute.For<IHelpResponder>();
+        sut = new(clock, helpResponder);
     }
 
     [Fact]
@@ -36,7 +38,7 @@ public class WelcomeHandlerFixture
     }
 
     [Fact]
-    public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndReturnsTrue()
+    public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
     {
         // Arrange
         var messageSender = Substitute.For<MessageSender>();
@@ -48,20 +50,8 @@ public class WelcomeHandlerFixture
         // Assert
         handled.Should().BeTrue();
         userData.Should().Be(new UserData(default, Now, default));
+        await helpResponder.Received(1).Help(messageSender);
+        helpResponder.ReceivedCalls().Should().ContainSingle();
+        messageSender.ReceivedCalls().Should().BeEmpty();
     }
-
-    //[Fact]
-    //public async Task GivenUserHasNoData_WhenTryHandle_ThenDataIsInitializedAndHelpMessageIsSentAndReturnsTrue()
-    //{
-    //    // Arrange
-    //    var messageSender = Substitute.For<MessageSender>();
-    //    UserData? data = default;
-
-    //    // Act
-    //    (bool handled, UserData? userData) = await sut.TryHandle(data, messageSender);
-
-    //    // Assert
-    //    handled.Should().BeTrue();
-    //    userData.Should().Be(new UserData(default, Now, default));
-    //}
 }
