@@ -23,7 +23,7 @@ public class TimeRangeHandlerFixture
     }
 
     [Fact]
-    public async Task GivenTimeMessage_WhenTryHandle_ThenReturnsTrue()
+    public async Task GivenTimeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue()
     {
         // Arrange
         var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: Started, PreviousTime: null);
@@ -35,6 +35,21 @@ public class TimeRangeHandlerFixture
         handled.Should().BeTrue();
         await messageSender.SentOnly($"Added 1:05. Total time recorded: 5:05");
         newData.Should().Be(new UserData(Time: TimeSpan.FromHours(5) + TimeSpan.FromMinutes(5), Started: Started, PreviousTime: originalData.Time));
+    }
+
+    [Fact]
+    public async Task GivenNegativeTimeMessage_WhenTryHandle_ThenSubtractsTimeAndRespondsAndReturnsTrue()
+    {
+        // Arrange
+        var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: Started, PreviousTime: null);
+
+        // Act
+        var (handled, newData) = await sut.TryHandle("-1:05", originalData, messageSender);
+
+        // Assert
+        handled.Should().BeTrue();
+        await messageSender.SentOnly($"Subtracted 1:05. Total time recorded: 2:55");
+        newData.Should().Be(new UserData(Time: TimeSpan.FromHours(2) + TimeSpan.FromMinutes(55), Started: Started, PreviousTime: originalData.Time));
     }
 
     [Theory]
