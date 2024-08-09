@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using TimeTracker.Services;
+﻿using TimeTracker.Services;
 
 namespace TimeTracker.Handlers;
 
@@ -7,15 +6,13 @@ public class UndoHandler : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
-        if (data is { } && IsCommand(Commands.UndoCommand))
+        if (data is { } && Commands.IsCommand(Commands.UndoCommand, message))
         {
             await Undo();
             return new HandleResult(true, data);
         }
 
         return new HandleResult(false, data);
-
-        bool IsCommand(string command) => command.Equals(message, StringComparison.InvariantCultureIgnoreCase);
 
         async Task Undo()
         {

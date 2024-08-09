@@ -10,4 +10,5 @@ internal static class Commands
     public const string UndoCommand = "/undo";
     public static string CommandListString => string.Join("", CommandList.Select(command => $"{LineBreak} {command}"));
     public static readonly string[] CommandList = [ShowTotalCommand, UndoCommand, ResetCommand, HelpCommand];
+    public static bool IsCommand(in string command, [AllowNull] in string message) => command.Equals(message, StringComparison.InvariantCultureIgnoreCase);
 }

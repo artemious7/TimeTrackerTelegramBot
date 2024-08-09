@@ -5,6 +5,6 @@ global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.Threading.Tasks;
+global using TimeTracker.Data;
 global using TimeTracker.Handlers;
 global using TimeTracker.Services;
-global using TimeTracker.Data;

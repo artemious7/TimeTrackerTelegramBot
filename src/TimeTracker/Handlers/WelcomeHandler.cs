@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Internal;
-using System.Diagnostics.CodeAnalysis;
 using TimeTracker.Services;
 
 namespace TimeTracker.Handlers;

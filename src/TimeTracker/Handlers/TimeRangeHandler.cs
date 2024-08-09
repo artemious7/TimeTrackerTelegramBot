@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using TimeTracker.Services;
+﻿using TimeTracker.Services;
 
 namespace TimeTracker.Handlers;
 

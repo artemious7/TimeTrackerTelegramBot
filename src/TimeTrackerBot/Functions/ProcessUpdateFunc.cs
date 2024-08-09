@@ -6,7 +6,6 @@ using System.Net;
 using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
-using TimeTracker.Data;
 using TimeTracker.Services;
 
 namespace TimeTracker.Functions;
