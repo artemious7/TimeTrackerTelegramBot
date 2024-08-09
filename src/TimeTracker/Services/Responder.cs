@@ -1,8 +1,4 @@
-﻿using TimeTracker.Handlers;
-using TimeTrackerBot.Services;
-using TimeTrackerBot.TimeTracker;
-
-namespace TimeTracker.Services;
+﻿namespace TimeTracker.Services;
 
 public class Responder(string message, UserData? data, MessageSender messageSender, IEnumerable<IHandler> handlers) : IResponder
 {

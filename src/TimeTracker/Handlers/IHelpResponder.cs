@@ -1,4 +1,4 @@
-﻿using TimeTrackerBot.Services;
+﻿using TimeTracker.Services;
 
 namespace TimeTracker.Handlers;
 

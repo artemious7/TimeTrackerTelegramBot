@@ -2,15 +2,14 @@ using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
-using TimeTrackerBot.Data;
-using TimeTrackerBot.TimeTracker;
-using TimeTrackerBot.Services;
 using System.Net;
 using System.Text.Json;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
+using TimeTracker.Data;
+using TimeTracker.Services;
 
-namespace TimeTrackerBot.Functions;
+namespace TimeTracker.Functions;
 public class ProcessUpdateFunc(ILogger<ProcessUpdateFunc> logger, IConfiguration configuration, ResponderFactory responderFactory)
 {
     private readonly TelegramBotClient? botClient = configuration[SettingsKeys.TelegramBotApiKey] is { } key ? new(key) : null;

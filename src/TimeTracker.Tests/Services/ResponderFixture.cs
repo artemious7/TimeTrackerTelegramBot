@@ -1,6 +1,4 @@
-﻿using TimeTracker.Services;
-
-namespace TimeTracker.Tests.Services;
+﻿namespace TimeTracker.Tests.Services;
 
 public class ResponderFixture
 {

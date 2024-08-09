@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using TimeTrackerBot.Services;
-using TimeTrackerBot.TimeTracker;
+using TimeTracker.Services;
 
 namespace TimeTracker.Handlers;
 

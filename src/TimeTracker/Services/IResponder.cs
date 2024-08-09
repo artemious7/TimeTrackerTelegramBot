@@ -1,6 +1,4 @@
-﻿using TimeTrackerBot.TimeTracker;
-
-namespace TimeTrackerBot.Services;
+﻿namespace TimeTracker.Services;
 
 public interface IResponder
 {

@@ -1,6 +1,4 @@
-﻿using TimeTrackerBot.TimeTracker;
-
-namespace TimeTracker.Handlers;
+﻿namespace TimeTracker.Handlers;
 
 public record struct HandleResult(bool Handled, UserData? UserData)
 {

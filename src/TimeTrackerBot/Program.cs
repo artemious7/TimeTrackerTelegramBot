@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Internal;
 using TimeTracker.Handlers;
-using TimeTrackerBot.Services;
+using TimeTracker.Services;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(workerApp =>

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace TimeTrackerBot.Data;
+namespace TimeTracker.Data;
 
 public class Update
 {

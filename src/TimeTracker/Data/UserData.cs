@@ -1,9 +1,8 @@
-﻿using TimeTrackerBot.Data;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace TimeTrackerBot.TimeTracker;
+namespace TimeTracker.Data;
 
-public record UserData(TimeSpan Time, DateTimeOffset Started, TimeSpan? PreviousTime) : IUserData
+public record UserData(TimeSpan Time, DateTimeOffset Started, TimeSpan? PreviousTime)
 {
     [JsonIgnore]
     public string TimeString => FormatTime(Time);
