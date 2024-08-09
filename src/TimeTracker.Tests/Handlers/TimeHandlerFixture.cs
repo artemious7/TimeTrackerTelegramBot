@@ -20,6 +20,20 @@ public class TimeHandlerFixture
         handled.Should().BeFalse();
         await messageSender.DidNotSendAnything();
     }
+    [Fact]
+    public async Task GivenNumberMessage_WhenTryHandle_ThenReturnsFalse()
+    {
+        // Arrange
+        string message = "1";
+        var data = new UserData(default, default, default);
+
+        // Act
+        bool handled = await sut.TryHandle(message, data, messageSender);
+
+        // Assert
+        handled.Should().BeFalse();
+        await messageSender.DidNotSendAnything();
+    }
 
     [Fact]
     public async Task GivenTimeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue()
