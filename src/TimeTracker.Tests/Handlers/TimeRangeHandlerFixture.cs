@@ -5,6 +5,7 @@ public class TimeRangeHandlerFixture
 {
     private readonly TimeRangeHandler sut = new();
     private readonly MessageSender messageSender = Substitute.For<MessageSender>();
+    private readonly DateTimeOffset Started = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 
     [Fact]
     public async Task GivenAnyOtherMessage_WhenTryHandle_ThenReturnsFalse()
@@ -21,21 +22,19 @@ public class TimeRangeHandlerFixture
         await messageSender.DidNotSendAnything();
     }
 
-    [Theory]
-    [InlineData("1:05")]
-    [InlineData("-1:00")]
-    [InlineData("- 0:05")]
-    public async Task GivenTimeMessage_WhenTryHandle_ThenReturnsFalse(string message)
+    [Fact]
+    public async Task GivenTimeMessage_WhenTryHandle_ThenReturnsTrue()
     {
         // Arrange
-        var data = new UserData(default, default, default);
+        var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: Started, PreviousTime: null);
 
         // Act
-        bool handled = await sut.TryHandle(message, data, messageSender);
+        var (handled, newData) = await sut.TryHandle("1:05", originalData, messageSender);
 
         // Assert
-        handled.Should().BeFalse();
-        await messageSender.DidNotSendAnything();
+        handled.Should().BeTrue();
+        await messageSender.SentOnly($"Added 1:05. Total time recorded: 5:05");
+        newData.Should().Be(new UserData(Time: TimeSpan.FromHours(5) + TimeSpan.FromMinutes(5), Started: Started, PreviousTime: originalData.Time));
     }
 
     [Theory]
@@ -45,7 +44,7 @@ public class TimeRangeHandlerFixture
     public async Task GivenTimeRangeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue(string message)
     {
         // Arrange
-        var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: default, PreviousTime: null);
+        var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: Started, PreviousTime: null);
 
         // Act
         var (handled, newData) = await sut.TryHandle(message, originalData, messageSender);
@@ -53,6 +52,6 @@ public class TimeRangeHandlerFixture
         // Assert
         handled.Should().BeTrue();
         await messageSender.SentOnly($"Added 1:05. Total time recorded: 5:05");
-        newData.Should().Be(new UserData(Time: TimeSpan.FromHours(5) + TimeSpan.FromMinutes(5), Started: default, PreviousTime: originalData.Time));
+        newData.Should().Be(new UserData(Time: TimeSpan.FromHours(5) + TimeSpan.FromMinutes(5), Started: Started, PreviousTime: originalData.Time));
     }
 }
