@@ -1,12 +1,11 @@
-﻿using Microsoft.Extensions.Internal;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
 namespace TimeTracker;
 
-public class UndoHandler(ISystemClock clock) : IHandler
+public class UndoHandler : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
@@ -32,6 +31,5 @@ public class UndoHandler(ISystemClock clock) : IHandler
         }
     }
 
-    private DateTimeOffset Now => clock.UtcNow;
     private const string UndoCommand = "/undo";
 }

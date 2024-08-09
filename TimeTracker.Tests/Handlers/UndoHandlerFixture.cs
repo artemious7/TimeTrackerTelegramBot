@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.Internal;
 using NSubstitute;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
@@ -8,15 +7,8 @@ namespace TimeTracker.Tests.Handlers;
 
 public class UndoHandlerFixture
 {
-    private readonly UndoHandler sut;
-    private readonly DateTimeOffset Now = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-    private readonly ISystemClock clock = Substitute.For<ISystemClock>();
-
-    public UndoHandlerFixture()
-    {
-        clock.UtcNow.Returns(Now);
-        sut = new UndoHandler(clock);
-    }
+    private readonly UndoHandler sut = new();
+    private readonly DateTimeOffset Started = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 
     [Fact]
     public async Task GivenAnyOtherMessage_WhenTryHandle_ThenReturnsFalse()
@@ -55,7 +47,7 @@ public class UndoHandlerFixture
         // Arrange
         string message = "/undo";
         var messageSender = Substitute.For<MessageSender>();
-        var originalData = new UserData(Time: TimeSpan.FromHours(2), Started: Now - TimeSpan.FromHours(22), PreviousTime: TimeSpan.FromHours(1));
+        var originalData = new UserData(Time: TimeSpan.FromHours(2), Started: Started, PreviousTime: TimeSpan.FromHours(1));
 
         // Act
         (bool handled, var newData) = await sut.TryHandle(message, originalData, messageSender);
@@ -72,7 +64,7 @@ public class UndoHandlerFixture
         // Arrange
         string message = "/undo";
         var messageSender = Substitute.For<MessageSender>();
-        var originalData = new UserData(Time: TimeSpan.FromHours(2), Started: Now - TimeSpan.FromHours(22), PreviousTime: null);
+        var originalData = new UserData(Time: TimeSpan.FromHours(2), Started: Started, PreviousTime: null);
 
         // Act
         (bool handled, var newData) = await sut.TryHandle(message, originalData, messageSender);
