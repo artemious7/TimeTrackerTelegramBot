@@ -1,12 +1,13 @@
-﻿using TimeTracker.Handlers;
+﻿using System.Diagnostics.CodeAnalysis;
+using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
 namespace TimeTracker;
 
-public class ShowTotalHandler
+public class ShowTotalHandler : IHandler
 {
-    public async Task<HandleResult> TryHandle(string message, UserData? data, MessageSender SendMessage)
+    public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
         if (data is not null && IsCommand(ShowTotalCommand))
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Internal;
+using System.Diagnostics.CodeAnalysis;
 using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
@@ -7,7 +8,7 @@ namespace TimeTracker;
 
 public class WelcomeHandler(ISystemClock clock, IHelpResponder helpResponder) : IHandler
 {
-    public async Task<HandleResult> TryHandle(UserData? data, MessageSender messageSender)
+    public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender messageSender)
     {
         if (data is not null)
         {

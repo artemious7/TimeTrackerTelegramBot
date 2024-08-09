@@ -29,7 +29,7 @@ public class WelcomeHandlerFixture
         UserData? data = new UserData(default, default, default);
 
         // Act
-        bool handled = await sut.TryHandle(data, messageSender);
+        bool handled = await sut.TryHandle(default, data, messageSender);
 
         // Assert
         handled.Should().BeFalse();
@@ -44,7 +44,7 @@ public class WelcomeHandlerFixture
         UserData? data = default;
 
         // Act
-        (bool handled, UserData? userData) = await sut.TryHandle(data, messageSender);
+        (bool handled, UserData? userData) = await sut.TryHandle(default, data, messageSender);
 
         // Assert
         handled.Should().BeTrue();

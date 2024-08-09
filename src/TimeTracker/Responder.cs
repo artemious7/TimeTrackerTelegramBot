@@ -1,48 +1,35 @@
-﻿using Microsoft.Extensions.Internal;
+﻿using System.Diagnostics.CodeAnalysis;
 using TimeTrackerBot.Services;
-using System.Diagnostics.CodeAnalysis;
 
 namespace TimeTrackerBot.TimeTracker;
 
-public class Responder(string message, UserData? data, MessageSender SendMessage, ISystemClock clock) : IResponder
+public class Responder(string message, UserData? data, MessageSender SendMessage, global::TimeTracker.Services.Responder inner) : IResponder
 {
     public async Task<UserData?> Process()
     {
-        if (data is null)
-            await Welcome();
-        else if (IsCommand(StartCommand) || IsCommand(HelpCommand))
-            await Help();
-        else if (IsCommand(ResetCommand))
-            await Reset();
-        else if (IsCommand(ShowTotalCommand))
-            await ShowTotal();
-        else if (IsCommand(UndoCommand))
-            await Undo();
-        else if (TryParseTimeRange(out TimeRange timeRange))
-            await AddTimeRange(timeRange);
-        else if (TryParseTime(message, out TimeSpan time))
-            await AddTime(time);
+        (var handled, var newData) = await inner.TryProcess();
+        if (handled)
+        {
+            return newData;
+        }
+        else if (data is null)
+        {
+            throw new InvalidOperationException("The case where data is null should have been handled by TimeTracker.Services.Responder.TryProcess()");
+        }
         else
-            await Error();
-        return data;
+        {
+            if (IsCommand(UndoCommand))
+                await Undo();
+            else if (TryParseTimeRange(out TimeRange timeRange))
+                await AddTimeRange(timeRange);
+            else if (TryParseTime(message, out TimeSpan time))
+                await AddTime(time);
+            else
+                await Error();
+            return data;
+        }
 
         bool IsCommand(string command) => command.Equals(message, StringComparison.InvariantCultureIgnoreCase);
-
-        async Task Welcome()
-        {
-            SaveData(new UserData(default, Now, default));
-            await Help();
-        }
-
-        async Task Help() => await SendMessage($"Send me the time, I will sum it up for you, e.g. `1:35` or `15:45 - 16:20` to add, or `-0:20` to subtract.{LineBreak}Commands:{CommandListString}");
-
-        async Task Reset()
-        {
-            SaveData(data with { Time = default, Started = Now, PreviousTime = data.Time });
-            await SendMessage($"Started over. Total time recorded: {data.TimeString}");
-        }
-
-        async Task ShowTotal() => await SendMessage($"Total time recorded is {data.TimeString} since {data.Started:f}.");
 
         async Task Undo()
         {
@@ -108,11 +95,8 @@ public class Responder(string message, UserData? data, MessageSender SendMessage
     private const string UndoCommand = "/undo";
     private static readonly string[] CommandList = [ShowTotalCommand, UndoCommand, ResetCommand, HelpCommand];
     private static readonly TimeSpan MaxAccumulatedTime = TimeSpan.FromHours(300);
-    private const string LineBreak = "  \r\n";
 
-    private DateTimeOffset Now => clock.UtcNow;
     private void SaveData(UserData newData) => data = newData;
-    private static string CommandListString => string.Join("", CommandList.Select(command => $"{LineBreak} {command}"));
 
     private struct TimeRange(TimeSpan Start, TimeSpan End) : IParsable<TimeRange>
     {

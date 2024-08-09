@@ -21,7 +21,7 @@ public class HelpHandlerFixture
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
-        bool handled = await sut.TryHandle(message, messageSender);
+        bool handled = await sut.TryHandle(message, default, messageSender);
 
         // Assert
         handled.Should().BeFalse();
@@ -37,7 +37,7 @@ public class HelpHandlerFixture
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
-        bool handled = await sut.TryHandle(message, messageSender);
+        bool handled = await sut.TryHandle(message, default, messageSender);
 
         // Assert
         handled.Should().BeTrue();
@@ -51,7 +51,7 @@ public class HelpHandlerFixture
         var messageSender = Substitute.For<MessageSender>();
 
         // Act
-        bool handled = await sut.TryHandle(null!, messageSender);
+        bool handled = await sut.TryHandle(null!, default, messageSender);
 
         // Assert
         handled.Should().BeFalse();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Internal;
 using TimeTrackerBot.TimeTracker;
 using TimeTrackerBot.Services;
+using TimeTracker;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication(workerApp =>
@@ -17,8 +18,14 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddSingleton<ISystemClock, SystemClock>();
+        services.AddSingleton<IHandler, WelcomeHandler>();
+        services.AddSingleton<IHandler, ShowTotalHandler>();
+        services.AddSingleton<IHandler, HelpHandler>();
+        services.AddSingleton<IHelpResponder, HelpHandler>();
+        services.AddSingleton<IHandler, ResetHandler>();
         services.AddSingleton(sp => new ResponderFactory((message, data, messageSender) => 
-            new Responder(message, data, messageSender, sp.GetRequiredService<ISystemClock>())));
+            new Responder(message, data, messageSender,  
+                new TimeTracker.Services.Responder(message, data, messageSender, sp.GetServices<IHandler>()))));
     })
     .Build();
 

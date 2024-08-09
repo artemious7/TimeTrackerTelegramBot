@@ -1,18 +1,20 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
+using TimeTrackerBot.TimeTracker;
 
 namespace TimeTracker;
 
-public class HelpHandler : IHandler
+public class HelpHandler : IHandler, IHelpResponder
 {
-    public async Task<bool> TryHandle([AllowNull] string message, MessageSender SendMessage)
+    public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
         if (IsCommand(StartCommand) || IsCommand(HelpCommand))
         {
             await Help(SendMessage);
-            return true;
+            return new(true, data);
         }
-        return false;
+        return new(false, data);
 
         bool IsCommand(string command) => command.Equals(message, StringComparison.InvariantCultureIgnoreCase);
     }
