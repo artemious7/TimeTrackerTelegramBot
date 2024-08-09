@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using TimeTrackerBot.Services;
-
-namespace TimeTracker.Tests.Handlers;
+﻿namespace TimeTracker.Tests.Handlers;
 
 public class HelpHandlerFixture
 {

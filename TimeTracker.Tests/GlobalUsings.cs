@@ -1,0 +1,9 @@
+﻿global using FluentAssertions;
+global using NSubstitute;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using TimeTrackerBot.Services;
+global using TimeTrackerBot.TimeTracker;
+global using Microsoft.Extensions.Internal;
