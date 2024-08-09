@@ -56,7 +56,7 @@ public class ResetHandlerFixture
 
         // Assert
         handled.Should().BeTrue();
-        await messageSender.Received(1).Invoke($"Started over. Total time recorded: 0:00");
+        await messageSender.SentOnly($"Started over. Total time recorded: 0:00");
         messageSender.ReceivedCalls().Should().ContainSingle();
         data.Should().Be(new UserData(TimeSpan.Zero, Now, TimeSpan.FromHours(2)));
     }

@@ -37,7 +37,7 @@ public class HelpHandlerFixture
 
         // Assert
         handled.Should().BeTrue();
-        await messageSender.Received(1).Invoke($"Send me the time, I will sum it up for you, e.g. `1:35` or `15:45 - 16:20` to add, or `-0:20` to subtract.  \r\nCommands:  \r\n /showTotal  \r\n /undo  \r\n /reset  \r\n /help");
+        await messageSender.SentOnly($"Send me the time, I will sum it up for you, e.g. `1:35` or `15:45 - 16:20` to add, or `-0:20` to subtract.  \r\nCommands:  \r\n /showTotal  \r\n /undo  \r\n /reset  \r\n /help");
     }
 
     [Fact]
