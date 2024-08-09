@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using System.Globalization;
-using TimeTrackerBot.Services;
-using TimeTrackerBot.TimeTracker;
+﻿using System.Globalization;
 
 namespace TimeTracker.Tests.Handlers;
 

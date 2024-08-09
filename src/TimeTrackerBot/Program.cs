@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Internal;
 using TimeTrackerBot.TimeTracker;
 using TimeTrackerBot.Services;
-using TimeTracker;
 using TimeTracker.Handlers;
 
 var host = new HostBuilder()

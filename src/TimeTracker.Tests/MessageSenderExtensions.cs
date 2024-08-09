@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using TimeTrackerBot.Services;
-
-namespace TimeTracker.Tests;
+﻿namespace TimeTracker.Tests;
 
 public static class MessageSenderExtensions
 {

@@ -1,9 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using TimeTrackerBot.Services;
-using TimeTrackerBot.TimeTracker;
-
-namespace TimeTracker.Tests.Handlers;
+﻿namespace TimeTracker.Tests.Handlers;
 
 public class UndoHandlerFixture
 {

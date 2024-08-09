@@ -1,6 +1,6 @@
 ﻿using TimeTrackerBot.Services;
 
-namespace TimeTracker;
+namespace TimeTracker.Handlers;
 
 public interface IHelpResponder
 {

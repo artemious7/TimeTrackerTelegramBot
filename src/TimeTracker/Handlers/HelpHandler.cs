@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using TimeTracker.Handlers;
 using TimeTrackerBot.Services;
 using TimeTrackerBot.TimeTracker;
 
-namespace TimeTracker;
+namespace TimeTracker.Handlers;
 
 public class HelpHandler : IHandler, IHelpResponder
 {

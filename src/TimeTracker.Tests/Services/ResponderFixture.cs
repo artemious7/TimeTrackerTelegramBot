@@ -1,8 +1,4 @@
-﻿using FluentAssertions;
-using NSubstitute;
-using TimeTracker.Services;
-using TimeTrackerBot.Services;
-using TimeTrackerBot.TimeTracker;
+﻿using TimeTracker.Services;
 
 namespace TimeTracker.Tests.Services;
 
