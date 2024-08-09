@@ -12,10 +12,8 @@ public class WelcomeHandler(ISystemClock clock, IHelpResponder helpResponder) : 
             return new HandleResult(false, data);
         }
 
-        data = new UserData(default, Now, default);
+        data = new UserData(default, clock.UtcNow, default);
         await helpResponder.Help(messageSender);
         return new HandleResult(true, data);
     }
-
-    private DateTimeOffset Now => clock.UtcNow;
 }
