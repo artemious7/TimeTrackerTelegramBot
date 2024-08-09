@@ -1,8 +1,8 @@
 ﻿namespace TimeTracker.Tests.Handlers;
 
-public class TimeRangeHandlerFixture
+public class TimeHandlerFixture
 {
-    private readonly TimeRangeHandler sut = new();
+    private readonly TimeHandler sut = new();
     private readonly MessageSender messageSender = Substitute.For<MessageSender>();
     private readonly DateTimeOffset Started = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 
@@ -53,8 +53,17 @@ public class TimeRangeHandlerFixture
 
     [Theory]
     [InlineData("0:00-1:05")]
+    [InlineData(" 0:00-1:05")]
+    [InlineData(" 0:00-1:05 ")]
+    [InlineData("0:00-1:05 ")]
     [InlineData("15:00-16:05")]
     [InlineData("17:30 - 18:35")]
+    [InlineData("17:30 to 18:35")]
+    [InlineData("17:30 -18:35")]
+    [InlineData("17:30to 18:35")]
+    [InlineData("17:30-18:35")]
+    [InlineData("17:30–18:35")]
+    [InlineData("17:30 18:35")]
     public async Task GivenTimeRangeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue(string message)
     {
         // Arrange

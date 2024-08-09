@@ -24,7 +24,7 @@ var host = new HostBuilder()
         services.AddSingleton<IHelpResponder, HelpHandler>();
         services.AddSingleton<IHandler, ResetHandler>();
         services.AddSingleton<IHandler, UndoHandler>();
-        services.AddSingleton<IHandler, TimeRangeHandler>();
+        services.AddSingleton<IHandler, TimeHandler>();
         services.AddSingleton<IHandler, UnknownCommandHandler>(); // must be the last one registered
 
         services.AddSingleton(sp => new ResponderFactory((message, data, messageSender) =>
