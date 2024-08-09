@@ -7,7 +7,7 @@ public class UndoHandler : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
-        if (data is { } && IsCommand(UndoCommand))
+        if (data is { } && IsCommand(Commands.UndoCommand))
         {
             await Undo();
             return new HandleResult(true, data);
@@ -28,6 +28,4 @@ public class UndoHandler : IHandler
             }
         }
     }
-
-    private const string UndoCommand = "/undo";
 }

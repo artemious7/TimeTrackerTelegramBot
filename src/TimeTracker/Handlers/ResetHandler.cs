@@ -8,7 +8,7 @@ public class ResetHandler(ISystemClock clock) : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
-        if (data is { } && IsCommand(ResetCommand))
+        if (data is { } && IsCommand(Commands.ResetCommand))
         {
             await Reset();
             return new HandleResult(true, data);
@@ -26,5 +26,4 @@ public class ResetHandler(ISystemClock clock) : IHandler
     }
 
     private DateTimeOffset Now => clock.UtcNow;
-    private const string ResetCommand = "/reset";
 }

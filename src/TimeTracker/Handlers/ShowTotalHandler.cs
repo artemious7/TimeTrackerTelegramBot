@@ -7,7 +7,7 @@ public class ShowTotalHandler : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
-        if (data is not null && IsCommand(ShowTotalCommand))
+        if (data is not null && IsCommand(Commands.ShowTotalCommand))
         {
             await ShowTotal();
             return new HandleResult(true, data);
@@ -19,6 +19,4 @@ public class ShowTotalHandler : IHandler
 
         async Task ShowTotal() => await SendMessage($"Total time recorded is {data.TimeString} since {data.Started:f}.");
     }
-
-    private const string ShowTotalCommand = "/showTotal";
 }
