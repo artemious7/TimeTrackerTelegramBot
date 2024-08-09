@@ -6,25 +6,14 @@ public class TimeHandlerFixture
     private readonly MessageSender messageSender = Substitute.For<MessageSender>();
     private readonly DateTimeOffset Started = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 
-    [Fact]
-    public async Task GivenAnyOtherMessage_WhenTryHandle_ThenReturnsFalse()
+    [Theory]
+    [InlineData("1")]
+    [InlineData("-1")]
+    [InlineData("-1-05")]
+    [InlineData("any other message")]
+    public async Task GivenAnyOtherMessage_WhenTryHandle_ThenReturnsFalse(string message)
     {
         // Arrange
-        string message = "any other message";
-        var data = new UserData(default, default, default);
-
-        // Act
-        bool handled = await sut.TryHandle(message, data, messageSender);
-
-        // Assert
-        handled.Should().BeFalse();
-        await messageSender.DidNotSendAnything();
-    }
-    [Fact]
-    public async Task GivenNumberMessage_WhenTryHandle_ThenReturnsFalse()
-    {
-        // Arrange
-        string message = "1";
         var data = new UserData(default, default, default);
 
         // Act
@@ -35,14 +24,16 @@ public class TimeHandlerFixture
         await messageSender.DidNotSendAnything();
     }
 
-    [Fact]
-    public async Task GivenTimeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue()
+    [Theory]
+    [InlineData("1:05")]
+    [InlineData("1-05")]
+    public async Task GivenTimeMessage_WhenTryHandle_ThenAddsTimeAndRespondsAndReturnsTrue(string message)
     {
         // Arrange
         var originalData = new UserData(Time: TimeSpan.FromHours(4), Started: Started, PreviousTime: null);
 
         // Act
-        var (handled, newData) = await sut.TryHandle("1:05", originalData, messageSender);
+        var (handled, newData) = await sut.TryHandle(message, originalData, messageSender);
 
         // Assert
         handled.Should().BeTrue();
