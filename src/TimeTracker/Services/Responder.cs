@@ -6,22 +6,17 @@ namespace TimeTracker.Services;
 
 public class Responder(string message, UserData? data, MessageSender messageSender, IEnumerable<IHandler> handlers) : IResponder
 {
-    public async Task<(bool handled, UserData? data)> TryProcess()
+    public async Task<UserData?> Process()
     {
         foreach (var handler in handlers)
         {
             (bool handled, var newUserData) = await handler.TryHandle(message, data, messageSender);
             if (handled)
             {
-                return (handled, newUserData);
+                return newUserData;
             }
         }
 
-        return (false, data);
-    }
-
-    public async Task<UserData?> Process()
-    {
-        return (await TryProcess()).data;
+        return data;
     }
 }
