@@ -18,28 +18,13 @@ public class Responder(string message, UserData? data, MessageSender SendMessage
         }
         else
         {
-            if (IsCommand(UndoCommand))
-                await Undo();
-            else if (TryParseTimeRange(out TimeRange timeRange))
+            if (TryParseTimeRange(out TimeRange timeRange))
                 await AddTimeRange(timeRange);
             else if (TryParseTime(message, out TimeSpan time))
                 await AddTime(time);
             else
                 await Error();
             return data;
-        }
-
-        bool IsCommand(string command) => command.Equals(message, StringComparison.InvariantCultureIgnoreCase);
-
-        async Task Undo()
-        {
-            if (data.PreviousTime is not { } previousTime)
-                await SendMessage("Nothing to undo");
-            else
-            {
-                SaveData(data with { Time = previousTime, PreviousTime = default });
-                await SendMessage($"Undone. Total time recorded: {data.TimeString}");
-            }
         }
 
         async Task AddTimeRange(TimeRange timeRange)
