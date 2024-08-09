@@ -19,13 +19,16 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddSingleton<ISystemClock, SystemClock>();
+
         services.AddSingleton<IHandler, WelcomeHandler>();
         services.AddSingleton<IHandler, ShowTotalHandler>();
         services.AddSingleton<IHandler, HelpHandler>();
         services.AddSingleton<IHelpResponder, HelpHandler>();
         services.AddSingleton<IHandler, ResetHandler>();
+        services.AddSingleton<IHandler, UndoHandler>();
         services.AddSingleton<IHandler, TimeRangeHandler>();
         services.AddSingleton<IHandler, UnknownCommandHandler>(); // must be the last one registered
+
         services.AddSingleton(sp => new ResponderFactory((message, data, messageSender) => 
             new Responder(data, new TimeTracker.Services.Responder(message, data, messageSender, sp.GetServices<IHandler>()))));
     })
