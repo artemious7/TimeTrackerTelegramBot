@@ -65,4 +65,21 @@ public class UndoHandlerFixture
         await messageSender.SentOnly($"Undone. Total time recorded: 1:00");
         newData.Should().Be(new UserData(Time: TimeSpan.FromHours(1), Started: originalData.Started, PreviousTime: null));
     }
+
+    [Fact]
+    public async Task GivenUndoCommandAndUserDataHasNoPreviousTime_WhenTryHandle_ThenSendsNothingToUndoResponseAndReturnsTrue()
+    {
+        // Arrange
+        string message = "/undo";
+        var messageSender = Substitute.For<MessageSender>();
+        var originalData = new UserData(Time: TimeSpan.FromHours(2), Started: Now - TimeSpan.FromHours(22), PreviousTime: null);
+
+        // Act
+        (bool handled, var newData) = await sut.TryHandle(message, originalData, messageSender);
+
+        // Assert
+        handled.Should().BeTrue();
+        await messageSender.SentOnly("Nothing to undo");
+        newData.Should().Be(originalData);
+    }
 }
