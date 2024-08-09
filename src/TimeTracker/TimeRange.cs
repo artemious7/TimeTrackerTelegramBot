@@ -2,26 +2,29 @@
 
 namespace TimeTrackerBot.TimeTracker;
 
-internal struct TimeRange(TimeSpan Start, TimeSpan End) : IParsable<TimeRange>
+public partial class Responder
 {
-    private const string ExpectedFormats = $"Expected formats: \"1:30-2:30\" or \"1:30 to 2:30\"";
-    private static readonly string[] separators = [" - ", " to ", " -", "to ", "-", "–", "—", " "];
-
-    public readonly TimeSpan Duration => End - Start;
-
-    public static TimeRange Parse(string s, IFormatProvider? provider) => TryParse(s, provider, out var result) ? result : throw new FormatException(ExpectedFormats);
-
-    public static bool TryParse([NotNullWhen(true)] string? input, IFormatProvider? provider, out TimeRange result)
+    internal struct TimeRange(TimeSpan Start, TimeSpan End) : IParsable<TimeRange>
     {
-        var parts = input?.Trim().Split(separators, StringSplitOptions.RemoveEmptyEntries);
-        if (parts is not [{ } startString, { } endString]
-            || !TryParseTime(startString, out TimeSpan start)
-            || !TryParseTime(endString, out TimeSpan end))
+        private const string ExpectedFormats = $"Expected formats: \"1:30-2:30\" or \"1:30 to 2:30\"";
+        private static readonly string[] separators = [" - ", " to ", " -", "to ", "-", "–", "—", " "];
+
+        public readonly TimeSpan Duration => End - Start;
+
+        public static TimeRange Parse(string s, IFormatProvider? provider) => TryParse(s, provider, out var result) ? result : throw new FormatException(ExpectedFormats);
+
+        public static bool TryParse([NotNullWhen(true)] string? input, IFormatProvider? provider, out TimeRange result)
         {
-            result = default;
-            return false;
+            var parts = input?.Trim().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            if (parts is not [{ } startString, { } endString]
+                || !TryParseTime(startString, out TimeSpan start)
+                || !TryParseTime(endString, out TimeSpan end))
+            {
+                result = default;
+                return false;
+            }
+            result = new TimeRange(start, end);
+            return true;
         }
-        result = new TimeRange(start, end);
-        return true;
     }
 }

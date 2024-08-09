@@ -7,3 +7,4 @@ global using System.Threading.Tasks;
 global using TimeTrackerBot.Services;
 global using TimeTrackerBot.TimeTracker;
 global using Microsoft.Extensions.Internal;
+global using TimeTracker.Handlers;

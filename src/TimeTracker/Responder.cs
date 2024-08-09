@@ -2,7 +2,7 @@
 
 namespace TimeTrackerBot.TimeTracker;
 
-public class Responder(string message, UserData? data, MessageSender SendMessage, global::TimeTracker.Services.Responder inner) : IResponder
+public partial class Responder(string message, UserData? data, MessageSender SendMessage, global::TimeTracker.Services.Responder inner) : IResponder
 {
     public async Task<UserData?> Process()
     {

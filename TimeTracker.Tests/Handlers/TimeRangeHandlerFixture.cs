@@ -1,4 +1,5 @@
-﻿namespace TimeTracker.Tests.Handlers;
+﻿
+namespace TimeTracker.Tests.Handlers;
 
 public class TimeRangeHandlerFixture
 {
