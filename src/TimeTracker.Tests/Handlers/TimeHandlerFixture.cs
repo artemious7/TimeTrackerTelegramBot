@@ -86,20 +86,20 @@ public class TimeHandlerFixture
     }
 
     [Fact]
-    public async Task GivenGreaterThanMaxCurrentTimeAndATimeMessage_WhenTryHandle_ThenSendsErrorResponse()
+    public async Task GivenCloseToMaxCurrentTimeAndSmallTimeToAddMessage_WhenTryHandle_ThenSendsErrorResponse()
     {
         // Arrange
-        var originalData = new UserData(Time: TimeSpan.FromHours(299), Started: Started, PreviousTime: null);
+        var originalData = new UserData(Time: TimeSpan.FromHours(299) + TimeSpan.FromMinutes(1), Started: Started, PreviousTime: null);
 
         // Act
         var (handled, newData) = await sut.TryHandle("1:00", originalData, messageSender);
 
         // Assert
         handled.Should().BeTrue();
-        newData.Should().Be(originalData);
         await messageSender.SentOnly($"You can't record more than 300 hours!");
+        newData.Should().Be(originalData);
     }
-
+     
     [Fact]
     public async Task GivenTimeRangeMessageWithEndGreaterThanStart_WhenTryHandle_ThenSendsErrorResponse()
     {

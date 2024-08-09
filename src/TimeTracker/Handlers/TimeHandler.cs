@@ -34,10 +34,11 @@ public class TimeHandler : IHandler
         async Task AddTime(TimeSpan timeToAdd)
         {
             timeToAdd = TrimToMinutes(timeToAdd);
-            TimeSpan absoluteTime = TimeSpan.FromTicks(Math.Abs(timeToAdd.Ticks));
+            TimeSpan absoluteTimeToAdd = TimeSpan.FromTicks(Math.Abs(timeToAdd.Ticks));
             TimeSpan newTime = data.Time + timeToAdd;
+            TimeSpan absoluteNewTime = TimeSpan.FromTicks(Math.Abs(newTime.Ticks));
             // not checking if it's negative to allow for debt carryover
-            if (absoluteTime > MaxAccumulatedTime)
+            if (absoluteNewTime > MaxAccumulatedTime)
             {
                 await SendMessage($"You can't record more than {MaxAccumulatedTime.TotalHours:N0} hours!");
                 return;
@@ -46,7 +47,7 @@ public class TimeHandler : IHandler
 
             bool isAddingNegative = timeToAdd < TimeSpan.Zero;
             string verb = !isAddingNegative ? "Added" : "Subtracted";
-            await SendMessage($"{verb} {UserData.FormatTime(absoluteTime)}. Total time recorded: {data.TimeString}");
+            await SendMessage($"{verb} {UserData.FormatTime(absoluteTimeToAdd)}. Total time recorded: {data.TimeString}");
 
             TimeSpan TrimToMinutes(TimeSpan time) => TimeSpan.FromMinutes(Math.Floor(time.TotalMinutes));
         }
