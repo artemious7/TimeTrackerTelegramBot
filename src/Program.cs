@@ -24,8 +24,7 @@ var host = new HostBuilder()
         services.AddSingleton<IHelpResponder, HelpHandler>();
         services.AddSingleton<IHandler, ResetHandler>();
         services.AddSingleton(sp => new ResponderFactory((message, data, messageSender) => 
-            new Responder(message, data, messageSender,  
-                new TimeTracker.Services.Responder(message, data, messageSender, sp.GetServices<IHandler>()))));
+            new Responder(data, messageSender, new TimeTracker.Services.Responder(message, data, messageSender, sp.GetServices<IHandler>()))));
     })
     .Build();
 
