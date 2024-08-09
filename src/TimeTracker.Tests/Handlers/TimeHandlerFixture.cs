@@ -101,7 +101,7 @@ public class TimeHandlerFixture
     }
      
     [Fact]
-    public async Task GivenTimeRangeMessageWithEndGreaterThanStart_WhenTryHandle_ThenSendsErrorResponse()
+    public async Task GivenTimeRangeMessageWithStartGreaterThanEnd_WhenTryHandle_ThenSendsErrorResponse()
     {
         // Arrange
         var originalData = new UserData(Time: TimeSpan.FromHours(1), Started: Started, PreviousTime: null);
