@@ -1,8 +1,11 @@
-﻿namespace TimeTracker.Tests.Handlers;
+﻿using System.Globalization;
+
+namespace TimeTracker.Tests.Handlers;
 
 public class TimeHandlerFixture
 {
-    private readonly TimeHandler sut = new();
+    private static readonly IFormatProvider formatProviderForDateTimeParsing = CultureInfo.InvariantCulture;
+    private readonly TimeHandler sut = new(formatProviderForDateTimeParsing);
     private readonly MessageSender messageSender = Substitute.For<MessageSender>();
     private readonly DateTimeOffset Started = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
 

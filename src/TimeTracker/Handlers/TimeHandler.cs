@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Handlers;
 
-public class TimeHandler : IHandler
+public class TimeHandler(IFormatProvider formatProvider) : IHandler
 {
     public async Task<HandleResult> TryHandle([AllowNull] string message, UserData? data, MessageSender SendMessage)
     {
@@ -13,7 +13,7 @@ public class TimeHandler : IHandler
                 await AddTimeRange(timeRange);
                 return new HandleResult(true, data);
             }
-            else if (TryParseTime(message, out TimeSpan time))
+            else if (TryParseTime(message, formatProvider, out TimeSpan time))
             {
                 await AddTime(time);
                 return new HandleResult(true, data);
@@ -22,7 +22,7 @@ public class TimeHandler : IHandler
 
         return new HandleResult(false, data);
 
-        bool TryParseTimeRange(out TimeRange timeRange) => TimeRange.TryParse(message, null, out timeRange);
+        bool TryParseTimeRange(out TimeRange timeRange) => TimeRange.TryParse(message, formatProvider, out timeRange);
 
         async Task AddTimeRange(TimeRange timeRange)
         {
@@ -52,7 +52,7 @@ public class TimeHandler : IHandler
             TimeSpan TrimToMinutes(TimeSpan time) => TimeSpan.FromMinutes(Math.Floor(time.TotalMinutes));
         }
     }
-    private static bool TryParseTime(string message, out TimeSpan time)
+    private static bool TryParseTime(string message, IFormatProvider? formatProvider, out TimeSpan time)
     {
         message = message.Replace(" ", "").Trim().Replace('.', ':');
         // treat '-' as ':' unless it's negative time since we don't want to parse "-1-30" because of ambiguity but we do want to treat "1-30" as "1:30"
@@ -60,11 +60,12 @@ public class TimeHandler : IHandler
         {
             message = message.Replace('-', ':');
         }
-        return TimeSpan.TryParse(message, out time) &&
+        return TimeSpan.TryParse(message, formatProvider, out time) &&
             // can't be an integer, otherwise it would be interpreted as days which probably wasn't intended
             !int.TryParse(message, out _);
     }
     private static readonly TimeSpan MaxAccumulatedTime = TimeSpan.FromHours(300);
+
     internal struct TimeRange(TimeSpan Start, TimeSpan End) : IParsable<TimeRange>
     {
         private const string ExpectedFormats = $"Expected formats: \"1:30-2:30\" or \"1:30 to 2:30\"";
@@ -74,12 +75,12 @@ public class TimeHandler : IHandler
 
         public static TimeRange Parse(string s, IFormatProvider? provider) => TryParse(s, provider, out var result) ? result : throw new FormatException(ExpectedFormats);
 
-        public static bool TryParse([NotNullWhen(true)] string? input, IFormatProvider? provider, out TimeRange result)
+        public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, out TimeRange result)
         {
-            var parts = input?.Trim().Split(separators, StringSplitOptions.RemoveEmptyEntries);
+            var parts = s?.Trim().Split(separators, StringSplitOptions.RemoveEmptyEntries);
             if (parts is not [{ } startString, { } endString]
-                || !TryParseTime(startString, out TimeSpan start)
-                || !TryParseTime(endString, out TimeSpan end))
+                || !TryParseTime(startString, provider, out TimeSpan start)
+                || !TryParseTime(endString, provider, out TimeSpan end))
             {
                 result = default;
                 return false;
