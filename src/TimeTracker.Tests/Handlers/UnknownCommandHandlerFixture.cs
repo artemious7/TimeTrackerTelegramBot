@@ -16,5 +16,6 @@ public class UnknownCommandHandlerFixture
         // Assert
         handled.Should().BeTrue();
         newData.Should().Be(originalData);
+        await messageSender.SentOnly("Oops, I didn't quite get that!");
     }
 }
