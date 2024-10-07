@@ -25,6 +25,7 @@ var host = new HostBuilder()
         services.AddSingleton<IHandler, ResetHandler>();
         services.AddSingleton<IHandler, UndoHandler>();
         services.AddSingleton<IHandler, TimeHandler>();
+        services.AddSingleton<IFormatProvider>(System.Globalization.CultureInfo.InvariantCulture);
         services.AddSingleton<IHandler, UnknownCommandHandler>(); // must be the last one registered
 
         services.AddSingleton(sp => new ResponderFactory((message, data, messageSender) =>
