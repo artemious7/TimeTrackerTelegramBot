@@ -56,7 +56,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=infra plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform -chdir=infra plan -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
