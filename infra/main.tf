@@ -6,8 +6,7 @@ resource "azurerm_resource_group" "default" {
 
 # Function app
 module "function_app" {
-  source                              = "Azure/avm-res-web-site/azurerm"
-  version                             = "0.9.1"
+  source                              = "git::https://github.com/Azure/avm-res-web-site/azurerm.git?ref=b8d63f47fc2cbfa21aa362d39a08ea38a9b31d36" # commit hash of version 0.9.1
   location                            = var.location
   resource_group_name                 = azurerm_resource_group.default.name
   name                                = "${module.naming.function_app.name_unique}-default"
