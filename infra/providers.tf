@@ -34,5 +34,5 @@ provider "azurerm" {
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
-  source = "git::https://github.com/Azure/terraform-azurerm-naming.git?ref=6a94122c37dc3b6f89e68695e1d3fd64bb021f02" # version 0.4.1
+  source = "git::https://github.com/Azure/terraform-azurerm-naming.git?ref=9aaa2b0f58383501a4025a4696e4225504ffa9c3" # version 0.4.1
 }
