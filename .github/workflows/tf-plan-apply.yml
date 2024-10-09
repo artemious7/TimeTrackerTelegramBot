@@ -35,9 +35,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Change directory
-      run: cd infra
-
     # Install the latest version of the Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -46,12 +43,12 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform -chdir=infra init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      run: terraform fmt -check
+      run: terraform -chdir=infra fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
