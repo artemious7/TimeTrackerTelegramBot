@@ -32,6 +32,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Change directory
+      run: cd infra
+
     # Install the latest version of the Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
