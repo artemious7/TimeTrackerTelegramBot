@@ -131,6 +131,10 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
+      # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
+    - name: fix terraform file permissions
+      run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform -chdir=infra init
