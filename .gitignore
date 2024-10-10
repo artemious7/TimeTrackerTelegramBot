@@ -271,3 +271,4 @@ __pycache__/
 *.tfstate.backup
 /src/TimeTrackerBot/Properties/PublishProfiles
 /src/TimeTrackerBot/Properties/serviceDependencies.*.json
+**/*.secrets
