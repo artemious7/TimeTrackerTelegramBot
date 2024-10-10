@@ -127,9 +127,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Change directory
-      run: cd infra
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -143,8 +140,8 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: tfplan
-        path: infra/.tfplan
+        path: infra
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform -chdir=infra apply -auto-approve .tfplan
+      run: terraform -chdir=infra apply -auto-approve tfplan
