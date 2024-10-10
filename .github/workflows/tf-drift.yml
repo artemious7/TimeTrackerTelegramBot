@@ -44,10 +44,10 @@ jobs:
     - name: fix terraform file permissions
       if: runner.os == 'Windows'
       run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
-      
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform -chdir=infra init
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -55,7 +55,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform -chdir=infra plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
         
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -71,13 +71,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: tfplan
+        path: .
         
     # Create string output of Terraform Plan
     - name: Create String Output
       id: tf-plan-string
       run: |
-        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
+        TERRAFORM_PLAN=$(terraform -chdir=infra show -no-color tfplan)
         
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
