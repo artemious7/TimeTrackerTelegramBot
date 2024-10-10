@@ -1,6 +1,7 @@
 name: 'Terraform Plan/Apply'
 
 on:
+  workflow_dispatch: # allows to manually trigger the workflow
   push:
     branches:
     - main
