@@ -35,6 +35,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Change directory
+      run: cd infra
+
     # Install the latest version of the Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -43,12 +46,12 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=infra init
+      run: terraform init
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      run: terraform -chdir=infra fmt -check
+      run: terraform fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -56,7 +59,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=infra plan -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -72,13 +75,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tfplan
-        path: infra/tfplan
+        path: tfplan
         
     # Create string output of Terraform Plan
     - name: Create String Output
       id: tf-plan-string
       run: |
-        TERRAFORM_PLAN=$(terraform -chdir=infra show -no-color tfplan)
+        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
         
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -127,21 +130,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Change directory
+      run: cd infra
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=infra init
+      run: terraform init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
       uses: actions/download-artifact@v4
       with:
         name: tfplan
-        path: infra
+        path: .
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform -chdir=infra apply -auto-approve tfplan
+      run: terraform apply -auto-approve tfplan
