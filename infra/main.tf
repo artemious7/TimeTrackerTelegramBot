@@ -1,3 +1,10 @@
+locals {
+  tags = {
+    Application = "TimerTrackerTelegramBot"
+    Creator     = var.creator_tag
+  }
+}
+
 # Resource group
 resource "azurerm_resource_group" "default" {
   name     = "timeTrackerBot-${module.naming.resource_group.name_unique}"
@@ -35,11 +42,4 @@ module "function_app" {
   }
 
   tags = local.tags
-}
-
-locals {
-  tags = {
-    project     = "TimerTrackerTelegramBot"
-    responsible = var.responsible_person_tag
-  }
 }

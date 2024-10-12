@@ -10,7 +10,7 @@ variable "TelegramBotApiKey" {
   description = "Telegram Bot API key"
 }
 
-variable "responsible_person_tag" {
+variable "creator_tag" {
   type    = string
   default = null
 }
