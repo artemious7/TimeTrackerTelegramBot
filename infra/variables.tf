@@ -9,3 +9,8 @@ variable "TelegramBotApiKey" {
   sensitive   = true
   description = "Telegram Bot API key"
 }
+
+variable "responsible_person_tag" {
+  type    = string
+  default = null
+}

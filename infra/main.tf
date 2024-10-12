@@ -2,6 +2,7 @@
 resource "azurerm_resource_group" "default" {
   name     = "timeTrackerBot-${module.naming.resource_group.name_unique}"
   location = var.location
+  tags     = local.tags
 }
 
 # Function app
@@ -31,5 +32,14 @@ module "function_app" {
     FUNCTIONS_WORKER_RUNTIME               = "dotnet-isolated"
     WEBSITE_RUN_FROM_PACKAGE               = "1"
     WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED = "1"
+  }
+
+  tags = local.tags
+}
+
+locals {
+  tags = {
+    project     = "TimerTrackerTelegramBot"
+    responsible = var.responsible_person_tag
   }
 }

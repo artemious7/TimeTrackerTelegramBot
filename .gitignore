@@ -265,13 +265,15 @@ __pycache__/
 *.pyc
 
 # PublishProfiles
-/src/TimeTrackerBot/Properties/PublishProfiles
-/src/TimeTrackerBot/Properties/serviceDependencies.*.json
+**/Properties/PublishProfiles
+**/Properties/serviceDependencies.*.json
 
 # secrets
 **/*.secrets
 
 # Terraform
+**/*.tfplan
+
 ## Local .terraform directories
 **/.terraform/*
 
@@ -301,3 +303,4 @@ override.tf.json
 ## Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
