@@ -7,7 +7,7 @@ locals {
 
 # Resource group
 resource "azurerm_resource_group" "default" {
-  name     = "timeTrackerBot-${module.naming.resource_group.name_unique}"
+  name     = module.naming.resource_group.name_unique
   location = var.location
   tags     = local.tags
 }
@@ -17,7 +17,7 @@ module "function_app" {
   source                              = "git::https://github.com/Azure/terraform-azurerm-avm-res-web-site.git?ref=b8d63f47fc2cbfa21aa362d39a08ea38a9b31d36" # commit hash of version 0.9.1
   location                            = var.location
   resource_group_name                 = azurerm_resource_group.default.name
-  name                                = "${module.naming.function_app.name_unique}-default"
+  name                                = module.naming.function_app.name_unique
   kind                                = "functionapp"
   os_type                             = "Windows"
   enable_telemetry                    = true
