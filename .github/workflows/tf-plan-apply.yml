@@ -28,6 +28,7 @@ jobs:
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
+      TF_IN_AUTOMATION: 1
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
 
@@ -122,6 +123,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: [terraform-plan]
+    env:
+      TF_IN_AUTOMATION: 1
     
     steps:
     # Checkout the repository to the GitHub Actions runner

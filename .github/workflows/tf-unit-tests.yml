@@ -12,6 +12,8 @@ jobs:
   terraform-unit-tests:
     name: 'Terraform Unit Tests'
     runs-on: ubuntu-latest
+    env:
+      TF_IN_AUTOMATION: 1
     
     steps:
     # Checkout the repository to the GitHub Actions runner
