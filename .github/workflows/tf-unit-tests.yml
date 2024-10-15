@@ -32,7 +32,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend=false
+      run: terraform init -backend=false -input=false
 
     # Validate terraform files
     - name: Terraform Validate
