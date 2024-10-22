@@ -6,7 +6,7 @@ on:
     branches:
     - main
 
-#Special permissions required for OIDC authentication
+# Special permissions required for OIDC authentication
 permissions:
   id-token: write
   contents: read
@@ -19,10 +19,6 @@ env:
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
   AZURE_FUNCTIONAPP_PACKAGE_PATH: published
-  CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 8.0.x
-  WORKING_DIRECTORY: ./src
-  FUNC_PROJECT: TimeTrackerBot/TimeTrackerBot.csproj
 
 jobs:
   provision:
@@ -123,6 +119,11 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      CONFIGURATION: Release
+      DOTNET_CORE_VERSION: 8.0.x
+      WORKING_DIRECTORY: ./src
+      FUNC_PROJECT: TimeTrackerBot/TimeTrackerBot.csproj
 
     steps:
     - uses: actions/checkout@v4
