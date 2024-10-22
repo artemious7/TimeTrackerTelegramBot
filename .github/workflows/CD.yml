@@ -8,6 +8,7 @@ on:
     paths:
       - 'infra/**'
       - 'src/**'
+      - '.github/workflows/CD.yml'
 
 # Special permissions required for OIDC authentication
 permissions:

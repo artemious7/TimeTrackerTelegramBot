@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'src/**'
+      - '.github/workflows/CI.yml'
 
 env:
   CONFIGURATION: Release

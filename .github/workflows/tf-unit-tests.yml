@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'infra/**'
+      - '.github/workflows/tf-unit-tests.yml'
 
 permissions:
   security-events: write # Needed to upload-sarif
