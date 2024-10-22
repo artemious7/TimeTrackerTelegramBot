@@ -1,11 +1,8 @@
-name: 'Terraform Plan/Apply'
+name: 'Infrastructure and App Deployment'
 
 on:
   workflow_dispatch: # allows to manually trigger the workflow
   push:
-    branches:
-    - main
-  pull_request:
     branches:
     - main
 
@@ -13,17 +10,22 @@ on:
 permissions:
   id-token: write
   contents: read
-  pull-requests: write
 
-#These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
+# The ARM_* environment variables are used by the terraform azure provider to setup OIDC authentication. 
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
   ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: published
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 8.0.x
+  WORKING_DIRECTORY: ./src
+  FUNC_PROJECT: TimeTrackerBot/TimeTrackerBot.csproj
+
 jobs:
-  terraform-plan:
+  deploy-infrastructure:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
@@ -32,6 +34,7 @@ jobs:
       TF_IN_AUTOMATION: 1
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
+      functionAppName: ${{ steps.terraformOutputsStep.outputs.FUNCTIONS_APP_NAME }}
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -43,6 +46,10 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_wrapper: false
+
+    # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
+    - name: fix terraform file permissions
+      run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -59,7 +66,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=infra plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=TimeTrackerTelegramBot-0947" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform -chdir=infra plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=${{ vars.RESOURCE_GROUP }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -100,57 +107,46 @@ jobs:
         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
       run: |
         echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-      
-    # If this is a PR post the changes
-    - name: Push Terraform Output to PR
-      if: github.ref != 'refs/heads/main'
-      uses: actions/github-script@v7
-      env:
-        SUMMARY: "${{ steps.tf-plan-string.outputs.summary }}"
-      with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const body = `${process.env.SUMMARY}`;
-            github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
-            })
-                
-  terraform-apply:
-    name: 'Terraform Apply'
-    if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
-    runs-on: ubuntu-latest
-    environment: production
-    needs: [terraform-plan]
-    env:
-      TF_IN_AUTOMATION: 1
-    
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-
-      # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
-    - name: fix terraform file permissions
-      run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
-
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform -chdir=infra init -input=false
-
-    # Download saved plan from artifacts  
-    - name: Download Terraform Plan
-      uses: actions/download-artifact@v4
-      with:
-        name: tfplan
-        path: infra
 
     # Terraform Apply
     - name: Terraform Apply
       run: terraform -chdir=infra apply -input=false -auto-approve tfplan
+
+    - name: Get Terraform Outputs
+      id: terraformOutputsStep
+      run: |
+        echo "FUNCTIONS_APP_NAME=$(terraform -chdir=infra output -raw function_app_name)" >> "$GITHUB_OUTPUT"
+        
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure
+    env:
+        FUNCTIONS_APP_NAME: ${{ needs.deploy-infrastructure.outputs.functionAppName }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
+    - name: Publish
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}/${{ env.FUNC_PROJECT }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
+            
+    - name: Install Azure CLI
+      run: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+    - name: Login to Azure
+      uses: azure/login@v2
+      with:
+        creds: '{"clientId":"${{ secrets.AZURE_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_TENANT_ID }}"}'
+
+    - name: Deploy to Azure Function App
+      uses: Azure/functions-action@v1
+      env:
+        PUBLISH_PROFILE: ${{ steps.publishProfile.outputs.publishProfile }}
+      with:
+        app-name: ${{ env.FUNCTIONS_APP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
