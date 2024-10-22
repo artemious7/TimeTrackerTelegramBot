@@ -18,6 +18,7 @@ permissions:
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate. 
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
@@ -58,7 +59,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=infra plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform -chdir=infra plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=TimeTrackerTelegramBot-0947" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -137,7 +138,6 @@ jobs:
 
       # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
     - name: fix terraform file permissions
-      if: runner.os == 'Windows'
       run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
