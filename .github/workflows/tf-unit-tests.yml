@@ -22,7 +22,7 @@ jobs:
       TF_IN_AUTOMATION: 1
     
     steps:
-    # Checkout the repository to the GitHub Actions runner
+      # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -32,7 +32,7 @@ jobs:
 
     # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
     - name: fix terraform file permissions
-      if: ${{ github.event.act }} # only run during local actions testing
+      if: github.event.act # only run during local actions testing
       run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
       continue-on-error: true
 
@@ -57,7 +57,7 @@ jobs:
 
     # Upload results to GitHub Advanced Security
     - name: Upload SARIF file
-      if: success() || failure()
+      if: (success() || failure()) && !github.event.act # skip during local actions testing
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: results.sarif
