@@ -1,7 +1,7 @@
-variable "location" {
-  description = "Location of the resources."
+variable "resource_group" {
+  description = "Existing resource group."
   type        = string
-  default     = "uksouth"
+  default     = "TimeTrackerTelegramBot"
 }
 
 variable "TelegramBotApiKey" {
