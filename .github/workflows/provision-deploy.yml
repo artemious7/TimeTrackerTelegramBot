@@ -14,6 +14,7 @@ permissions:
 # The ARM_* environment variables are used by the terraform azure provider to setup OIDC authentication. 
 env:
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
   ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
 
@@ -48,6 +49,7 @@ jobs:
 
     # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
     - name: fix terraform file permissions
+      if: ${{ vars.IS_LOCAL_ACT_CLI }} == false
       run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
       continue-on-error: true
 
@@ -155,10 +157,6 @@ jobs:
       with:
         name: published
         path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        
-    - name: Install Azure CLI
-      if: ${{ vars.IS_LOCAL_ACT_CLI }}
-      run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
