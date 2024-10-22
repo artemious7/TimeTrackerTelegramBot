@@ -160,7 +160,7 @@ jobs:
         path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         
     - name: Install Azure CLI
-      if: ${{ !env.GITHUB_ACTIONS }}
+      if: ${{ vars.IS_LOCAL_ACT_CLI }}
       run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
     - name: 'Login via Azure CLI'
