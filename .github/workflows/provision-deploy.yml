@@ -32,9 +32,9 @@ jobs:
       run:
         working-directory: infra
     env:
-      # this is needed since we are running Terraform with read-only permissions
-      ARM_SKIP_PROVIDER_REGISTRATION: true
       TF_IN_AUTOMATION: 1
+      TF_VAR_resource_group: ${{ vars.RESOURCE_GROUP }}
+
     outputs:
       tfplanExitCode: ${{ steps.tf-plan.outputs.exitcode }}
       functionAppName: ${{ steps.terraformOutputsStep.outputs.FUNCTIONS_APP_NAME }}
@@ -71,7 +71,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=${{ vars.RESOURCE_GROUP }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
