@@ -48,7 +48,7 @@ jobs:
 
     # bug with act and terraform permissions: https://github.com/nektos/act/issues/491
     - name: fix terraform file permissions
-      if: ${{ vars.IS_LOCAL_ACT_CLI }} == false
+      if: ${{ github.event.act }} # only run during local actions testing
       run: find /tmp -name "terraform" -type f -exec chmod 755 {} +
       continue-on-error: true
 
