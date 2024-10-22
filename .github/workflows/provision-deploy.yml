@@ -25,9 +25,12 @@ env:
   FUNC_PROJECT: TimeTrackerBot/TimeTrackerBot.csproj
 
 jobs:
-  provision-infrastructure:
-    name: 'Terraform provisioning'
+  provision:
+    name: Terraform provision
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
     env:
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
@@ -55,12 +58,12 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=infra init -input=false
+      run: terraform init -input=false
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      run: terraform -chdir=infra fmt -check -recursive
+      run: terraform fmt -check -recursive
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -68,7 +71,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform -chdir=infra plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=${{ vars.RESOURCE_GROUP }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -input=false -var="TelegramBotApiKey={{ secrets.TELEGRAM_BOT_API_KEY }}" -var="resource_group=${{ vars.RESOURCE_GROUP }}" -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -90,7 +93,7 @@ jobs:
     - name: Create String Output
       id: tf-plan-string
       run: |
-        TERRAFORM_PLAN=$(terraform -chdir=infra show -no-color tfplan)
+        TERRAFORM_PLAN=$(terraform show -no-color tfplan)
         
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
@@ -110,12 +113,12 @@ jobs:
         echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
 
     - name: Terraform Apply
-      run: terraform -chdir=infra apply -input=false -auto-approve tfplan
+      run: terraform apply -input=false -auto-approve tfplan
 
     - name: Get Terraform Outputs
       id: terraformOutputsStep
       run: |
-        echo "FUNCTIONS_APP_NAME=$(terraform -chdir=infra output -raw function_app_name)" >> "$GITHUB_OUTPUT"
+        echo "FUNCTIONS_APP_NAME=$(terraform output -raw function_app_name)" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build
@@ -147,7 +150,7 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: [provision-infrastructure, build]
+    needs: [provision, build]
     env:
       FUNCTIONS_APP_NAME: ${{ needs.provision-infrastructure.outputs.functionAppName }}
 
