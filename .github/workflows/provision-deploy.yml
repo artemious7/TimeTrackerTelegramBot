@@ -11,8 +11,8 @@ permissions:
   id-token: write
   contents: read
 
-# The ARM_* environment variables are used by the terraform azure provider to setup OIDC authentication. 
 env:
+  # The ARM_* environment variables are used by the Terraform AzureRM provider for authentication
   ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
   ARM_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
   ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
@@ -32,7 +32,7 @@ jobs:
       run:
         working-directory: infra
     env:
-      #this is needed since we are running terraform with read-only permissions
+      # this is needed since we are running Terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
       TF_IN_AUTOMATION: 1
     outputs:
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [provision, build]
     env:
-      FUNCTIONS_APP_NAME: ${{ needs.provision-infrastructure.outputs.functionAppName }}
+      FUNCTIONS_APP_NAME: ${{ needs.provision.outputs.functionAppName }}
 
     steps:
     - name: Download
