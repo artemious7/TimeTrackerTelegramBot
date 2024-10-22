@@ -4,7 +4,10 @@ on:
   workflow_dispatch: # allows to manually trigger the workflow
   push:
     branches:
-    - main
+      - main
+    paths:
+      - 'infra/**'
+      - 'src/**'
 
 # Special permissions required for OIDC authentication
 permissions:

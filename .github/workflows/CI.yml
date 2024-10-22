@@ -2,7 +2,9 @@ name: Build and Test
 on:
   push:
     branches:
-    - main
+      - main
+    paths:
+      - 'src/**'
 
 env:
   CONFIGURATION: Release
