@@ -26,7 +26,7 @@ env:
 
 jobs:
   deploy-infrastructure:
-    name: 'Terraform Plan'
+    name: 'Terraform Apply'
     runs-on: ubuntu-latest
     env:
       #this is needed since we are running terraform with read-only permissions
@@ -119,10 +119,11 @@ jobs:
         echo "FUNCTIONS_APP_NAME=$(terraform -chdir=infra output -raw function_app_name)" >> "$GITHUB_OUTPUT"
         
   build-and-deploy:
+    name: Build and deploy
     runs-on: ubuntu-latest
     needs: deploy-infrastructure
     env:
-        FUNCTIONS_APP_NAME: ${{ needs.deploy-infrastructure.outputs.functionAppName }}
+      FUNCTIONS_APP_NAME: ${{ needs.deploy-infrastructure.outputs.functionAppName }}
 
     steps:
     - uses: actions/checkout@v4
@@ -133,7 +134,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
     - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}/${{ env.FUNC_PROJECT }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.WORKING_DIRECTORY }}/${{ env.FUNC_PROJECT }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
             
     - name: Install Azure CLI
       run: |
@@ -146,8 +147,6 @@ jobs:
 
     - name: Deploy to Azure Function App
       uses: Azure/functions-action@v1
-      env:
-        PUBLISH_PROFILE: ${{ steps.publishProfile.outputs.publishProfile }}
       with:
         app-name: ${{ env.FUNCTIONS_APP_NAME }}
         package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
