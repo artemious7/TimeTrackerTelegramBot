@@ -133,6 +133,12 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
+    - name: Build
+      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+
+    - name: Test
+      run: dotnet test --no-build "${{ env.WORKING_DIRECTORY }}"
+        
     - name: Publish
       run: dotnet publish "${{ env.WORKING_DIRECTORY }}/${{ env.FUNC_PROJECT }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}"
             
