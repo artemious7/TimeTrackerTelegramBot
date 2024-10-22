@@ -304,4 +304,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-infra/tfplan
+**/tfplan
+act-cli-temp-artifacts/
