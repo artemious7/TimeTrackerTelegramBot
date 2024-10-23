@@ -2,6 +2,8 @@
 
 <img src="docs/icon.png" height="60" />
 
+This project was created as a minimalistic portfolio project to showcase just a few of my coding skills, such as TDD, CI/CD workflows, IaC, serverless cloud apps, and clean coding practices. 
+
 This bot is designed to help you efficiently track and report your working time through a convenient and intuitive interface.
 
 Try it live at [@turbo_time_tracker_bot](https://t.me/turbo_time_tracker_bot)
